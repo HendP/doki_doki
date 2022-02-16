@@ -2,16 +2,53 @@ import 'package:doki_doki/model/anime_rank_model.dart';
 import 'package:flutter/material.dart';
 import 'package:doki_doki/model/manga_rank_model.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MainScreen> createState() => _MainScreen();
+}
+
+class _MainScreen extends State<MainScreen> {
+  int _selectedIndex = 0;
+  String _titlePage = "Manga Ranking By Popularity";
+
+  final List _pageOptions = [MangaRankingScreen(), AnimeRankingScreen()];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (index == 0) {
+        _titlePage = "Ranking Manga by Popularity";
+      } else if (index == 1) {
+        _titlePage = "Ranking Anime by Popularity";
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Doki Doki'),
-        ),
-        body: AnimeRankingScreen());
+      appBar: AppBar(
+        title: Text(_titlePage),
+      ),
+      body: _pageOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book),
+            label: 'Manga',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.movie_filter_outlined),
+            label: 'Anime',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blueAccent[800],
+        onTap: _onItemTapped,
+      ),
+    );
   }
 }
 
@@ -34,69 +71,74 @@ class MangaRankingScreen extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            child: Container(
-              margin: const EdgeInsets.all(8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                            "Rank",
-                            style: TextStyle(
-                                fontSize: 21.0, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "# " + manga.ranking.toString(),
-                            style: const TextStyle(fontSize: 32.0),
-                          ),
-                          const SizedBox(height: 10),
-                        ],
+            child: Flexible(
+              child: Container(
+                margin: const EdgeInsets.all(8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const Text(
+                              "Rank",
+                              style: TextStyle(
+                                  fontSize: 21.0, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "# " + manga.ranking.toString(),
+                              style: const TextStyle(fontSize: 32.0),
+                            ),
+                            const SizedBox(height: 10),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Hero(
-                        tag: "place-image-${manga.urlPicture}",
-                        child: Image.network(manga.urlPicture)),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    flex: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            manga.name,
-                            style: const TextStyle(
-                                fontSize: 16.0, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          Row(children: <Widget>[
-                            const Icon(Icons.star, color: Colors.amberAccent),
-                            const SizedBox(width: 10),
-                            Text(manga.score.toString())
-                          ]),
-                          const SizedBox(height: 10),
-                          Row(children: <Widget>[
-                            const Icon(Icons.brush, color: Colors.blueAccent),
-                            const SizedBox(width: 10),
-                            Text(manga.author)
-                          ]),
-                        ],
-                      ),
+                    Expanded(
+                      flex: 1,
+                      child: Hero(
+                          tag: "place-image-${manga.urlPicture}",
+                          child: Image.network(manga.urlPicture)),
                     ),
-                  )
-                ],
+                    const SizedBox(width: 20),
+                    Expanded(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              manga.name,
+                              style: const TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(children: <Widget>[
+                              const Icon(Icons.star, color: Colors.amberAccent),
+                              const SizedBox(width: 10),
+                              Text(manga.score.toString())
+                            ]),
+                            const SizedBox(height: 10),
+                            Row(children: <Widget>[
+                              const Icon(Icons.brush, color: Colors.blueAccent),
+                              const SizedBox(width: 10),
+                              SizedBox(
+                                  width: 140,
+                                  child: Text(manga.author,
+                                      overflow: TextOverflow.ellipsis))
+                            ]),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );
@@ -180,7 +222,8 @@ class AnimeRankingScreen extends StatelessWidget {
                           ]),
                           const SizedBox(height: 10),
                           Row(children: <Widget>[
-                            const Icon(Icons.movie_creation, color: Colors.blueAccent),
+                            const Icon(Icons.movie_creation,
+                                color: Colors.blueAccent),
                             const SizedBox(width: 10),
                             Text(anime.studio)
                           ]),

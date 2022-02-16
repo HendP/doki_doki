@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.henhen.doki_doki">
    <application
-        android:label="doki_doki"
+        android:label="Doki Doki"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
