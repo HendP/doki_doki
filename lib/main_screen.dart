@@ -71,8 +71,7 @@ class MangaRankingScreen extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            child: Flexible(
-              child: Container(
+            child: Container(
                 margin: const EdgeInsets.all(8),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,7 +139,6 @@ class MangaRankingScreen extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
           );
         },
         itemCount: mangaRankModel.length,
